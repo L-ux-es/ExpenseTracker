@@ -26,7 +26,7 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    Task findById(@PathVariable long id) {
+    Task findById(@PathVariable int id) {
         Optional<Task> task = taskRepository.findById(id);
         if (task.isEmpty()) {
             throw new TaskNotFoundException();
@@ -42,13 +42,13 @@ public class TaskController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
-    void update(@Valid @RequestBody Task task, @PathVariable long id) {
+    void update(@Valid @RequestBody Task task, @PathVariable int id) {
         taskRepository.update(task, id);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    void delete(@PathVariable long id) {
+    void delete(@PathVariable int id) {
         taskRepository.delete(id);
     }
 }

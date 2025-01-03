@@ -18,7 +18,7 @@ public class TaskRepository {
         return taskList;
     }
 
-    public Optional<Task> findById(long id) {
+    public Optional<Task> findById(int id) {
         return taskList.stream().filter(task -> task.id() == id).findFirst();
     }
 
@@ -26,14 +26,14 @@ public class TaskRepository {
         taskList.add(task);
     }
 
-    public void update(Task task, long id) {
+    public void update(Task task, int id) {
         Optional<Task> taskOptional = findById(id);
         if (taskOptional.isPresent()) {
             taskList.set(taskList.indexOf(taskOptional.get()), task);
         }
     }
 
-    public void delete(long id) {
+    public void delete(int id) {
         taskList.removeIf(task -> task.id()==id);
     }
 
