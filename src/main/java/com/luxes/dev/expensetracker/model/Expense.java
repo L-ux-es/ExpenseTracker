@@ -1,11 +1,12 @@
 package com.luxes.dev.expensetracker.model;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import java.time.LocalDate;
 
 
-public record Task(
+public record Expense(
         int id,
         @NotBlank(message = "Description should not be blank.")
         String description,
