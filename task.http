@@ -1,30 +1,30 @@
-### Create new Task
-POST http://localhost:8080/api/tasks
+### Create new Expense
+POST http://localhost:8080/api/expenses
 Content-Type: application/json
 
 {
   "id": 4,
-  "description": "Comprar comida",
+  "description": "Buy a car",
   "category": "Food",
   "dateCreation": "2025-01-01",
-  "cost": 25.00
+  "cost": 2500.00
 }
 
-### Create a Task with invalid cost
-POST http://localhost:8080/api/tasks/
+### Create an Expense with invalid cost value
+POST http://localhost:8080/api/expenses
 Content-Type: application/json
 
 {
- "id": 4,
-  "description": "Comprar comida",
+  "id": 4,
+  "description": "Pay internet",
   "category": "Food",
   "dateCreation": "2025-01-01",
   "cost": "twenty"
 }
 
 
-### Create a Task with only blank spaces in description
-POST http://localhost:8080/api/tasks
+### Create a Expense with only blank spaces in description
+POST http://localhost:8080/api/expenses
 Content-Type: application/json
 
 {
@@ -35,28 +35,28 @@ Content-Type: application/json
   "cost": 1.0
 }
 
-### Update Task with id: 4
-PUT http://localhost:8080/api/tasks/4
+### Update Expense with id: 4
+PUT http://localhost:8080/api/expenses/4
 Content-Type:application/json
 
 {
-"id": 4,
-"description": "Comprar comida china",
-"category": "Food",
-"dateCreation": "2025-01-01",
-"cost": 55.00
+  "id": 4,
+  "description": "Pay tax",
+  "category": "Food",
+  "dateCreation": "2025-01-01",
+  "cost": 55.00
 }
 
-### Get Task with id: 1
-GET http://localhost:8080/api/tasks/1
+### Get Expense with id: 1
+GET http://localhost:8080/api/expenses/1
 
-### Get Task with id 99 that doesn't exist
-GET http://localhost:8080/api/tasks/99
-
-
-### Get all tasks
-GET http://localhost:8080/api/tasks
+### Get Expense with id 99 that doesn't exist
+GET http://localhost:8080/api/expenses/99
 
 
-### Delete a Task with id 4
-DELETE http://localhost:8080/api/tasks/4
+### Get all expenses
+GET http://localhost:8080/api/expenses
+
+
+### Delete a Expense with id 4
+DELETE http://localhost:8080/api/expenses/4
