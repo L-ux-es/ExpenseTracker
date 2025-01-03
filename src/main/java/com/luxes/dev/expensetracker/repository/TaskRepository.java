@@ -19,7 +19,7 @@ public class TaskRepository {
     }
 
     public Optional<Task> findById(long id) {
-        return taskList.stream().filter(task -> task.getId() == id).findFirst();
+        return taskList.stream().filter(task -> task.id() == id).findFirst();
     }
 
     public void create(Task task) {
@@ -34,7 +34,7 @@ public class TaskRepository {
     }
 
     public void delete(long id) {
-        taskList.removeIf(task -> task.getId() == id);
+        taskList.removeIf(task -> task.id()==id);
     }
 
     @PostConstruct
