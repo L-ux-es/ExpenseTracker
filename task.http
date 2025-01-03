@@ -1,0 +1,62 @@
+### Create new Task
+POST http://localhost:8080/api/tasks
+Content-Type: application/json
+
+{
+  "id": 4,
+  "description": "Comprar comida",
+  "category": "Food",
+  "dateCreation": "2025-01-01",
+  "cost": 25.00
+}
+
+### Create a Task with invalid cost
+POST http://localhost:8080/api/tasks/
+Content-Type: application/json
+
+{
+ "id": 4,
+  "description": "Comprar comida",
+  "category": "Food",
+  "dateCreation": "2025-01-01",
+  "cost": "twenty"
+}
+
+
+### Create a Task with only blank spaces in description
+POST http://localhost:8080/api/tasks
+Content-Type: application/json
+
+{
+  "id": 8,
+  "description": "  ",
+  "category": "Food",
+  "dateCreation": "2025-01-01",
+  "cost": 1.0
+}
+
+### Update Task with id: 4
+PUT http://localhost:8080/api/tasks/4
+Content-Type:application/json
+
+{
+"id": 4,
+"description": "Comprar comida china",
+"category": "Food",
+"dateCreation": "2025-01-01",
+"cost": 55.00
+}
+
+### Get Task with id: 1
+GET http://localhost:8080/api/tasks/1
+
+### Get Task with id 99 that doesn't exist
+GET http://localhost:8080/api/tasks/99
+
+
+### Get all tasks
+GET http://localhost:8080/api/tasks
+
+
+### Delete a Task with id 4
+DELETE http://localhost:8080/api/tasks/4
