@@ -7,7 +7,6 @@ import org.springframework.util.Assert;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,22 +52,23 @@ public class ExpenseRepository {
     }
 
     public void saveAll(List<Expense> expenses) {
-        expenses.stream().forEach(this::create);
+        expenses.forEach(this::create);
     }
 
     public List<Expense> findByCategory(String category) {
-        return jdbcClient.sql("SELECT * FROM expense WHERE LOWER(expense.category) = LOWER(?)").param(category).query(Expense.class).list();
+        return jdbcClient.sql("SELECT * FROM expense WHERE LOWER(expense.category) = LOWER(?)")
+                .param(category).query(Expense.class).list();
     }
 
     public List<Expense> filterByWeek(int week) {
-        LocalDate dateToSearch = LocalDate.now().minus(week, ChronoUnit.WEEKS);
+        LocalDate dateToSearch = LocalDate.now().minusWeeks(week);
         LocalDate mondayOfDateToSearch = dateToSearch.with(DayOfWeek.MONDAY);
         LocalDate sundayOfDateToSearch = dateToSearch.with(DayOfWeek.SUNDAY);
         return filterByDates(mondayOfDateToSearch, sundayOfDateToSearch);
     }
 
     public List<Expense> filterByMonth(int month) {
-        LocalDate dateToSearch = LocalDate.now().minus(month, ChronoUnit.MONTHS);
+        LocalDate dateToSearch = LocalDate.now().minusMonths(month);
         int yearToSearch = dateToSearch.getYear();
         int monthValue = dateToSearch.getMonthValue();
         int finalDay = dateToSearch.lengthOfMonth();
@@ -78,7 +78,7 @@ public class ExpenseRepository {
     }
 
     public List<Expense> filterByLastMonths(int month) {
-        LocalDate dateToSearch = LocalDate.now().minus(month, ChronoUnit.MONTHS);
+        LocalDate dateToSearch = LocalDate.now().minusMonths(month);
         int yearToSearch = dateToSearch.getYear();
         int monthValue = dateToSearch.getMonthValue();
         LocalDate initialDate = LocalDate.of(yearToSearch, monthValue, 1);
