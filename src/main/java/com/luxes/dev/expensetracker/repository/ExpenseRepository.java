@@ -5,8 +5,8 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -60,15 +60,12 @@ public class ExpenseRepository {
         return jdbcClient.sql("SELECT * FROM expense WHERE expense.category = ?").param(category).query(Expense.class).list();
     }
 
-    /*public List<Expense> filterByWeek(int week) {
+    public List<Expense> filterByWeek(int week) {
         LocalDate dateToSearch = LocalDate.now().minus(week, ChronoUnit.WEEKS);
-        int yearToSearch = dateToSearch.getYear();
-        int monthValue = dateToSearch.getMonthValue();
-      //  int finalDayOfWeek = dateToSearch.getDayOfWeek().range(ChronoField.);
-        LocalDate initialDate = LocalDate.of(yearToSearch, monthValue, 22);
-        LocalDate finalDate = LocalDate.of(yearToSearch, monthValue, 29);
-        return filterByDates(initialDate, finalDate);
-    }*/
+        LocalDate mondayOfDateToSearch = dateToSearch.with(DayOfWeek.MONDAY);
+        LocalDate sundayOfDateToSearch = dateToSearch.with(DayOfWeek.SUNDAY);
+        return filterByDates(mondayOfDateToSearch, sundayOfDateToSearch);
+    }
 
     public List<Expense> filterByMonth(int month) {
         LocalDate dateToSearch = LocalDate.now().minus(month, ChronoUnit.MONTHS);

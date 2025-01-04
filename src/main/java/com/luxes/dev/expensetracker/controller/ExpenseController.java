@@ -59,10 +59,10 @@ public class ExpenseController {
         return expenseRepository.findByCategory(category);
     }
 
-   /* @GetMapping("/pastweek")
+   @GetMapping("/pastweek")
     List<Expense> filterByWeek() {
         return expenseRepository.filterByWeek(1);
-    }*/
+    }
 
     @GetMapping("/lastmonth")
     List<Expense> filterByLastMonth() {
