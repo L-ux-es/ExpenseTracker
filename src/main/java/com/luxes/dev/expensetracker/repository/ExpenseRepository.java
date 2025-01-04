@@ -57,7 +57,7 @@ public class ExpenseRepository {
     }
 
     public List<Expense> findByCategory(String category) {
-        return jdbcClient.sql("SELECT * FROM expense WHERE expense.category = ?").param(category).query(Expense.class).list();
+        return jdbcClient.sql("SELECT * FROM expense WHERE LOWER(expense.category) = LOWER(?)").param(category).query(Expense.class).list();
     }
 
     public List<Expense> filterByWeek(int week) {
