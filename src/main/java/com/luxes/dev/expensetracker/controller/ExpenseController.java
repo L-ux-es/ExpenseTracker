@@ -1,6 +1,7 @@
 package com.luxes.dev.expensetracker.controller;
 
 import com.luxes.dev.expensetracker.exception.ExpenseNotFoundException;
+import com.luxes.dev.expensetracker.model.CustomDate;
 import com.luxes.dev.expensetracker.model.Expense;
 import com.luxes.dev.expensetracker.repository.ExpenseRepository;
 import jakarta.validation.Valid;
@@ -59,7 +60,7 @@ public class ExpenseController {
         return expenseRepository.findByCategory(category);
     }
 
-   @GetMapping("/pastweek")
+    @GetMapping("/pastweek")
     List<Expense> filterByWeek() {
         return expenseRepository.filterByWeek(1);
     }
@@ -79,11 +80,10 @@ public class ExpenseController {
         return expenseRepository.filterByLastMonths(cantMonths);
     }
 
-    //Fix, change to RequestBody
-   /* @GetMapping("/date")
-    List<Expense> filterByDate(@Valid @RequestParam String start, @Valid @RequestParam String finish) {
-        LocalDate startDate = LocalDate.parse(start);
-        LocalDate finishDate = LocalDate.parse(finish);
-        return expenseRepository.filterByDates(startDate,finishDate);
-    }*/
+    @GetMapping("/date")
+    List<Expense> filterByDate(@RequestBody CustomDate customDate) {
+        LocalDate startDate = customDate.startDate();
+        LocalDate finishDate = customDate.finishDate();
+        return expenseRepository.filterByDates(startDate, finishDate);
+    }
 }
