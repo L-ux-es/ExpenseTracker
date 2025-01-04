@@ -91,4 +91,7 @@ public class ExpenseRepository {
                 .params(List.of(startDate, finishDate)).query(Expense.class).list();
     }
 
+    public List<Expense> filterByCostMinorOrEqualTo(double cost) {
+        return jdbcClient.sql("SELECT * FROM expense WHERE expense.cost <= ?").param(cost).query(Expense.class).list();
+    }
 }

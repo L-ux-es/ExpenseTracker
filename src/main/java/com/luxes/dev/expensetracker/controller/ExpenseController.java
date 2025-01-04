@@ -86,4 +86,9 @@ public class ExpenseController {
         LocalDate finishDate = customDate.finishDate();
         return expenseRepository.filterByDates(startDate, finishDate);
     }
+
+    @GetMapping("/cost/{cost}")
+    List<Expense> filterByCost(@PathVariable double cost) {
+        return expenseRepository.filterByCostMinorOrEqualTo(cost);
+    }
 }
