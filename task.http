@@ -57,6 +57,27 @@ GET http://localhost:8080/api/expenses/99
 ### Get all expenses
 GET http://localhost:8080/api/expenses
 
-
 ### Delete a Expense with id 4
 DELETE http://localhost:8080/api/expenses/4
+
+
+### Filter by category
+GET http://localhost:8080/api/expenses/category/Food
+
+### Filter by past month
+GET http://localhost:8080/api/expenses/lastmonth
+
+### Filter by last 3 months
+GET http://localhost:8080/api/expenses/3months
+
+### Filter by last 6 months
+GET http://localhost:8080/api/expenses/months/6
+
+### Filter by dates
+GET http://localhost:8080/api/expenses/date
+Content-Type: application/json
+
+{
+  "startDate": "2024-08-01",
+  "finishDate": "2025-01-05"
+}
