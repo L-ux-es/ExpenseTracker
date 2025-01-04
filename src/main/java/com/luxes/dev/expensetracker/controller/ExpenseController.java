@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,4 +52,38 @@ public class ExpenseController {
     void delete(@PathVariable int id) {
         expenseRepository.delete(id);
     }
+
+
+    @GetMapping("category/{category}")
+    List<Expense> findByCategory(@Valid @PathVariable String category) {
+        return expenseRepository.findByCategory(category);
+    }
+
+   /* @GetMapping("/pastweek")
+    List<Expense> filterByWeek() {
+        return expenseRepository.filterByWeek(1);
+    }*/
+
+    @GetMapping("/lastmonth")
+    List<Expense> filterByLastMonth() {
+        return expenseRepository.filterByMonth(1);
+    }
+
+    @GetMapping("/3months")
+    List<Expense> filterBy3Months() {
+        return expenseRepository.filterByLastMonths(3);
+    }
+
+    @GetMapping("/months/{cantMonths}")
+    List<Expense> filterByMonths(@PathVariable int cantMonths) {
+        return expenseRepository.filterByLastMonths(cantMonths);
+    }
+
+    //Fix, change to RequestBody
+   /* @GetMapping("/date")
+    List<Expense> filterByDate(@Valid @RequestParam String start, @Valid @RequestParam String finish) {
+        LocalDate startDate = LocalDate.parse(start);
+        LocalDate finishDate = LocalDate.parse(finish);
+        return expenseRepository.filterByDates(startDate,finishDate);
+    }*/
 }

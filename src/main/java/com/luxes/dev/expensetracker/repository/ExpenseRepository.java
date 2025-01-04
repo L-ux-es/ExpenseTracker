@@ -5,6 +5,9 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +25,8 @@ public class ExpenseRepository {
     }
 
     public Optional<Expense> findById(int id) {
-        return jdbcClient.sql("SELECT id,description,category,date_creation,cost FROM expense WHERE id =?").param(id).query(Expense.class).optional();
+        return jdbcClient.sql("SELECT id,description,category,date_creation,cost FROM expense WHERE id =?")
+                .param(id).query(Expense.class).optional();
     }
 
 
@@ -44,7 +48,7 @@ public class ExpenseRepository {
         Assert.state(deleted == 1, "Failed to delete expense with id " + id);
     }
 
-      public int count() {
+    public int count() {
         return jdbcClient.sql("SELECT count(*) FROM expense").query().listOfRows().size();
     }
 
@@ -52,6 +56,42 @@ public class ExpenseRepository {
         expenses.stream().forEach(this::create);
     }
 
+    public List<Expense> findByCategory(String category) {
+        return jdbcClient.sql("SELECT * FROM expense WHERE expense.category = ?").param(category).query(Expense.class).list();
+    }
 
+    /*public List<Expense> filterByWeek(int week) {
+        LocalDate dateToSearch = LocalDate.now().minus(week, ChronoUnit.WEEKS);
+        int yearToSearch = dateToSearch.getYear();
+        int monthValue = dateToSearch.getMonthValue();
+      //  int finalDayOfWeek = dateToSearch.getDayOfWeek().range(ChronoField.);
+        LocalDate initialDate = LocalDate.of(yearToSearch, monthValue, 22);
+        LocalDate finalDate = LocalDate.of(yearToSearch, monthValue, 29);
+        return filterByDates(initialDate, finalDate);
+    }*/
+
+    public List<Expense> filterByMonth(int month) {
+        LocalDate dateToSearch = LocalDate.now().minus(month, ChronoUnit.MONTHS);
+        int yearToSearch = dateToSearch.getYear();
+        int monthValue = dateToSearch.getMonthValue();
+        int finalDay = dateToSearch.lengthOfMonth();
+        LocalDate initialDate = LocalDate.of(yearToSearch, monthValue, 1);
+        LocalDate finalDate = LocalDate.of(yearToSearch, monthValue, finalDay);
+        return filterByDates(initialDate, finalDate);
+    }
+
+    public List<Expense> filterByLastMonths(int month) {
+        LocalDate dateToSearch = LocalDate.now().minus(month, ChronoUnit.MONTHS);
+        int yearToSearch = dateToSearch.getYear();
+        int monthValue = dateToSearch.getMonthValue();
+        LocalDate initialDate = LocalDate.of(yearToSearch, monthValue, 1);
+        LocalDate finalDate = LocalDate.now();
+        return filterByDates(initialDate, finalDate);
+    }
+
+    public List<Expense> filterByDates(LocalDate startDate, LocalDate finishDate) {
+        return jdbcClient.sql("SELECT * FROM expense WHERE date_creation BETWEEN ? AND ?")
+                .params(List.of(startDate, finishDate)).query(Expense.class).list();
+    }
 
 }
