@@ -62,7 +62,10 @@ DELETE http://localhost:8080/api/expenses/4
 
 
 ### Filter by category
-GET http://localhost:8080/api/expenses/category/Food
+GET http://localhost:8080/api/expenses/category/food
+
+### Filter by past week
+GET http://localhost:8080/api/expenses/pastweek
 
 ### Filter by past month
 GET http://localhost:8080/api/expenses/lastmonth
