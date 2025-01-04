@@ -81,6 +81,9 @@ GET http://localhost:8080/api/expenses/date
 Content-Type: application/json
 
 {
-  "startDate": "2024-08-01",
+  "startDate": "2024-12-01",
   "finishDate": "2025-01-05"
 }
+
+### Filter by cost minor or equal to 10
+GET http://localhost:8080/api/expenses/cost/10.0
