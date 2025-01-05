@@ -52,7 +52,7 @@ public class CategoryController {
         categoryRepository.delete(id);
     }
 
-    @GetMapping("/{category}")
+    @GetMapping("name/{category}")
     Category findByCategory(@Valid @PathVariable String category) {
         Optional<Category> categoryObject = categoryRepository.findByCategory(category);
         if (categoryObject.isEmpty()) {
