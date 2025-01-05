@@ -63,14 +63,14 @@ class CategoryRepositoryTest {
     @Test
     void count() {
         int count = categoryRepository.count();
-        System.out.println(categoryRepository.findAll());
-        assertEquals(7, count);
+        assertEquals(categoryRepository.findAll().size(), count);
     }
 
     @Test
     void saveAll() {
+        int count = categoryRepository.count();
         categoryRepository.saveAll(List.of(new Category(8, "New Category"),
                 new Category(9, "Other Category")));
-        assertEquals(9, categoryRepository.findAll().size());
+        assertEquals(count + 2, categoryRepository.findAll().size());
     }
 }

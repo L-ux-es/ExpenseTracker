@@ -2,11 +2,13 @@ package com.luxes.dev.expensetracker.repository;
 
 import com.luxes.dev.expensetracker.model.Category;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class CategoryRepository {
     private final JdbcClient jdbcClient;
 
@@ -25,8 +27,13 @@ public class CategoryRepository {
     }
 
     public Optional<Category> findByCategory(String category) {
-        return jdbcClient.sql("SELECT id,category.category FROM category WHERE category.category=?")
+        return jdbcClient.sql("SELECT id,category.category FROM category WHERE LOWER(category.category) = LOWER(?)")
                 .param(category).query(Category.class).optional();
+    }
+
+    public int findIdByCategory(String category) {
+        Optional<Category> categoryOptional = findByCategory(category);
+        return categoryOptional.map(Category::id).orElse(-1);
     }
 
 
