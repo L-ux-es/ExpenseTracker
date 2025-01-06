@@ -18,16 +18,16 @@ public class CategoryRepository {
 
 
     public List<Category> findAll() {
-        return jdbcClient.sql("SELECT * from category").query(Category.class).list();
+        return jdbcClient.sql("SELECT * from categories").query(Category.class).list();
     }
 
     public Optional<Category> findById(int id) {
-        return jdbcClient.sql("SELECT id,category.category FROM category WHERE id =?")
+        return jdbcClient.sql("SELECT id,categories.category FROM categories WHERE id =?")
                 .param(id).query(Category.class).optional();
     }
 
     public Optional<Category> findByCategory(String category) {
-        return jdbcClient.sql("SELECT id,category.category FROM category WHERE LOWER(category.category) = LOWER(?)")
+        return jdbcClient.sql("SELECT id,categories.category FROM categories WHERE LOWER(categories.category) = LOWER(?)")
                 .param(category).query(Category.class).optional();
     }
 
@@ -38,25 +38,25 @@ public class CategoryRepository {
 
 
     public void create(Category category) {
-        var created = jdbcClient.sql("INSERT INTO category (category) VALUES (?)")
+        var created = jdbcClient.sql("INSERT INTO categories (category) VALUES (?)")
                 .params(category.category()).update();
         Assert.state(created == 1, "Failed to create category" + category.category());
     }
 
     public void update(Category category, int id) {
-        var updated = jdbcClient.sql("UPDATE category SET category=? WHERE id=?")
+        var updated = jdbcClient.sql("UPDATE categories SET category=? WHERE id=?")
                 .params(category.category(), id)
                 .update();
         Assert.state(updated == 1, "Failed to update category" + category.category());
     }
 
     public void delete(int id) {
-        var deleted = jdbcClient.sql("DELETE FROM category WHERE id = ?").param(id).update();
+        var deleted = jdbcClient.sql("DELETE FROM categories WHERE id = ?").param(id).update();
         Assert.state(deleted == 1, "Failed to delete category with id " + id);
     }
 
     public int count() {
-        return jdbcClient.sql("SELECT count(*) FROM category").query(Integer.class).single();
+        return jdbcClient.sql("SELECT count(*) FROM categories").query(Integer.class).single();
     }
 
     public void saveAll(List<Category> categories) {
