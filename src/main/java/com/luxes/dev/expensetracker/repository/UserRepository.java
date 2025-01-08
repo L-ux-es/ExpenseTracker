@@ -43,7 +43,7 @@ public class UserRepository {
 
     public void delete(int id) {
         if (countByRol("admin") > 1) {
-            expenseRepository.deleteByUserId(id);
+            expenseRepository.deleteAll(id);
             var deleted = jdbcClient.sql("DELETE FROM users WHERE users.id = ?").param(id).update();
             Assert.state(deleted == 1, "Failed to delete user with id " + id);
         }

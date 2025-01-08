@@ -17,6 +17,7 @@ import java.util.Optional;
 public class ExpenseController {
 
     private final ExpenseRepository expenseRepository;
+    private static final int USER_ID = 1;
 
     public ExpenseController(ExpenseRepository expenseRepository) {
         this.expenseRepository = expenseRepository;
@@ -24,12 +25,12 @@ public class ExpenseController {
 
     @GetMapping("")
     List<Expense> findAll() {
-        return expenseRepository.findAll();
+        return expenseRepository.findAllByUserId(USER_ID);
     }
 
     @GetMapping("/{id}")
     Expense findById(@PathVariable int id) {
-        Optional<Expense> task = expenseRepository.findById(id);
+        Optional<Expense> task = expenseRepository.findById(id, USER_ID);
         if (task.isEmpty()) {
             throw new ExpenseNotFoundException();
         }
@@ -39,56 +40,56 @@ public class ExpenseController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
     void create(@Valid @RequestBody Expense expense) {
-        expenseRepository.create(expense);
+        expenseRepository.create(expense, USER_ID);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PutMapping("/{id}")
-    void update(@Valid @RequestBody Expense expense, @PathVariable int id) {
-        expenseRepository.update(expense, id);
+    @PutMapping("")
+    void update(@Valid @RequestBody Expense expense) {
+        expenseRepository.update(expense, USER_ID);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     void delete(@PathVariable int id) {
-        expenseRepository.delete(id);
+        expenseRepository.delete(id, USER_ID);
     }
 
 
     @GetMapping("category/{category}")
     List<Expense> findByCategory(@Valid @PathVariable String category) {
-        return expenseRepository.findByCategory(category);
+        return expenseRepository.findByCategory(category, USER_ID);
     }
 
     @GetMapping("/pastweek")
     List<Expense> filterByWeek() {
-        return expenseRepository.filterByWeek(1);
+        return expenseRepository.filterByWeek(1, USER_ID);
     }
 
     @GetMapping("/lastmonth")
     List<Expense> filterByLastMonth() {
-        return expenseRepository.filterByMonth(1);
+        return expenseRepository.filterByMonth(1, USER_ID);
     }
 
     @GetMapping("/3months")
     List<Expense> filterBy3Months() {
-        return expenseRepository.filterByLastMonths(3);
+        return expenseRepository.filterByLastMonths(3, USER_ID);
     }
 
     @GetMapping("/months/{cantMonths}")
     List<Expense> filterByMonths(@PathVariable int cantMonths) {
-        return expenseRepository.filterByLastMonths(cantMonths);
+        return expenseRepository.filterByLastMonths(cantMonths, USER_ID);
     }
 
     @GetMapping("/date")
     List<Expense> filterByDate(@RequestBody CustomDate customDate) {
         LocalDate startDate = customDate.startDate();
         LocalDate finishDate = customDate.finishDate();
-        return expenseRepository.filterByDates(startDate, finishDate);
+        return expenseRepository.filterByDates(startDate, finishDate, USER_ID);
     }
 
     @GetMapping("/cost/{cost}")
     List<Expense> filterByCost(@PathVariable double cost) {
-        return expenseRepository.filterByCostMinorOrEqualTo(cost);
+        return expenseRepository.filterByCostMinorOrEqualTo(cost, USER_ID);
     }
 }

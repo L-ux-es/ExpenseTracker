@@ -21,19 +21,24 @@ public class ExpenseRepository {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<Expense> findAll() {
-        return jdbcClient.sql("SELECT expense.id,description,category,date_creation,cost FROM expense,category WHERE category.id=expense.category_fk").query(Expense.class).list();
+    public List<Expense> findAllByUserId(int userId) {
+        System.out.println(userId);
+        return jdbcClient.sql("SELECT expenses.id,description,category,date_creation,cost FROM expenses " +
+                        "JOIN categories ON categories.id = expenses.category_fk WHERE expenses.user_fk = ?")
+                .param(userId).query(Expense.class).list();
     }
 
-    public Optional<Expense> findById(int id) {
-        return jdbcClient.sql("SELECT expense.id,description,category,date_creation,cost FROM expense,category WHERE expense.id =? AND category.id=expense.category_fk")
-                .param(id).query(Expense.class).optional();
+    public Optional<Expense> findById(int id, int userId) {
+        return jdbcClient.sql("SELECT expenses.id,description,category,date_creation,cost FROM expenses" +
+                        " JOIN categories ON categories.id = expenses.category_fk " +
+                        "WHERE expenses.user_fk=? AND expenses.id = ?")
+                .params(List.of(userId, id)).query(Expense.class).optional();
     }
 
 
-    public void create(Expense expense) {
-        var created = jdbcClient.sql("INSERT INTO expense (description,category_fk,date_creation,cost) VALUES (?,?,?,?)")
-                .params(List.of(expense.description(), getCategoryId(expense), expense.dateCreation(), expense.cost())).update();
+    public void create(Expense expense, int userId) {
+        var created = jdbcClient.sql("INSERT INTO expenses (description,category_fk,date_creation,cost,user_fk) VALUES (?,?,?,?,?)")
+                .params(List.of(expense.description(), getCategoryId(expense), expense.dateCreation(), expense.cost()), userId).update();
         Assert.state(created == 1, "Failed to create expense" + expense.description());
     }
 
@@ -49,63 +54,74 @@ public class ExpenseRepository {
         return categoryId;
     }
 
-    public void update(Expense expense, int id) {
-        var updated = jdbcClient.sql("UPDATE expense SET description=?, category_fk=?,date_creation=?,cost=? WHERE id=?")
-                .params(List.of(expense.description(), getCategoryId(expense), expense.dateCreation(), expense.cost(), id))
+    public void update(Expense expense, int userId) {
+        var updated = jdbcClient.sql("UPDATE expense SET description=?, category_fk=?,date_creation=?,cost=? WHERE user_fk=? AND id=?")
+                .params(List.of(expense.description(), getCategoryId(expense), expense.dateCreation(), expense.cost(), userId, expense.id()))
                 .update();
         Assert.state(updated == 1, "Failed to update expense" + expense.description());
     }
 
-    public void delete(int id) {
-        var deleted = jdbcClient.sql("DELETE FROM expense WHERE expense.id = ?").param(id).update();
+    public void delete(int id, int userId) {
+        var deleted = jdbcClient.sql("DELETE FROM expenses WHERE user_fk=? AND expenses.id = ?").params(List.of(userId, id)).update();
         Assert.state(deleted == 1, "Failed to delete expense with id " + id);
     }
 
-    public int count() {
-        return jdbcClient.sql("SELECT count(*) FROM expense").query(Integer.class).single();
+    public void deleteAll(int userId) {
+        var deleted = jdbcClient.sql("DELETE FROM expenses WHERE expenses.user_fk = ?").param(userId).update();
+        Assert.state(deleted == 1, "Failed to delete expenses of user with id " + userId);
     }
 
-    public void saveAll(List<Expense> expenses) {
-        expenses.forEach(this::create);
+    public int count(int userId) {
+        return jdbcClient.sql("SELECT count(*) FROM expenses WHERE user_fk=?").param(userId).query(Integer.class).single();
     }
 
-    public List<Expense> findByCategory(String category) {
-        return jdbcClient.sql("SELECT expense.id,description,category,date_creation,cost FROM expense,category WHERE LOWER(category.category) = LOWER(?) AND category.id=expense.category_fk")
-                .param(category).query(Expense.class).list();
+    public void saveAll(List<Expense> expenses, int userId) {
+        for (Expense expense : expenses) {
+            create(expense, userId);
+        }
     }
 
-    public List<Expense> filterByWeek(int week) {
+    public List<Expense> findByCategory(String category, int userId) {
+        return jdbcClient.sql("SELECT expenses.id,description,category,date_creation,cost FROM expenses JOIN categories " +
+                        "ON categories.id=expenses.category_fk WHERE user_fk=? AND LOWER(categories.category) = LOWER(?)")
+                .params(List.of(userId, category)).query(Expense.class).list();
+    }
+
+    public List<Expense> filterByWeek(int week, int userId) {
         LocalDate dateToSearch = LocalDate.now().minusWeeks(week);
         LocalDate mondayOfDateToSearch = dateToSearch.with(DayOfWeek.MONDAY);
         LocalDate sundayOfDateToSearch = dateToSearch.with(DayOfWeek.SUNDAY);
-        return filterByDates(mondayOfDateToSearch, sundayOfDateToSearch);
+        return filterByDates(mondayOfDateToSearch, sundayOfDateToSearch, userId);
     }
 
-    public List<Expense> filterByMonth(int month) {
+    public List<Expense> filterByMonth(int month, int userId) {
         LocalDate dateToSearch = LocalDate.now().minusMonths(month);
         int yearToSearch = dateToSearch.getYear();
         int monthValue = dateToSearch.getMonthValue();
         int finalDay = dateToSearch.lengthOfMonth();
         LocalDate initialDate = LocalDate.of(yearToSearch, monthValue, 1);
         LocalDate finalDate = LocalDate.of(yearToSearch, monthValue, finalDay);
-        return filterByDates(initialDate, finalDate);
+        return filterByDates(initialDate, finalDate, userId);
     }
 
-    public List<Expense> filterByLastMonths(int month) {
+    public List<Expense> filterByLastMonths(int month, int userId) {
         LocalDate dateToSearch = LocalDate.now().minusMonths(month);
         int yearToSearch = dateToSearch.getYear();
         int monthValue = dateToSearch.getMonthValue();
         LocalDate initialDate = LocalDate.of(yearToSearch, monthValue, 1);
         LocalDate finalDate = LocalDate.now();
-        return filterByDates(initialDate, finalDate);
+        return filterByDates(initialDate, finalDate, userId);
     }
 
-    public List<Expense> filterByDates(LocalDate startDate, LocalDate finishDate) {
-        return jdbcClient.sql("SELECT expense.id,description,category,date_creation,cost FROM expense,category WHERE (date_creation BETWEEN ? AND ?) AND expense.category_fk= category.id")
-                .params(List.of(startDate, finishDate)).query(Expense.class).list();
+    public List<Expense> filterByDates(LocalDate startDate, LocalDate finishDate, int userId) {
+        return jdbcClient.sql("SELECT expenses.id,description,category,date_creation,cost FROM expenses JOIN categories " +
+                        "ON categories.id=expenses.category_fk WHERE expenses.user_fk=? AND date_creation BETWEEN ? AND ?")
+                .params(List.of(userId, startDate, finishDate)).query(Expense.class).list();
     }
 
-    public List<Expense> filterByCostMinorOrEqualTo(double cost) {
-        return jdbcClient.sql("SELECT expense.id,description,category,date_creation,cost FROM expense,category WHERE expense.cost <= ? AND category.id=expense.category_fk").param(cost).query(Expense.class).list();
+    public List<Expense> filterByCostMinorOrEqualTo(double cost,int userId) {
+        return jdbcClient.sql("SELECT expenses.id,description,category,date_creation,cost FROM expenses JOIN categories " +
+                "ON expenses.category_fk = categories.id  WHERE expenses.user_fk=? AND expenses.cost <= ?")
+                .params(List.of(userId,cost)).query(Expense.class).list();
     }
 }
