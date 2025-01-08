@@ -43,6 +43,12 @@ public class ExpenseController {
         expenseRepository.create(expense, USER_ID);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/saveAll")
+    void saveAll(@Valid @RequestBody List<Expense> expenses) {
+        expenseRepository.saveAll(expenses, USER_ID);
+    }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("")
     void update(@Valid @RequestBody Expense expense) {
@@ -91,5 +97,10 @@ public class ExpenseController {
     @GetMapping("/cost/{cost}")
     List<Expense> filterByCost(@PathVariable double cost) {
         return expenseRepository.filterByCostMinorOrEqualTo(cost, USER_ID);
+    }
+
+    @GetMapping("/count")
+    Integer count() {
+        return expenseRepository.count(USER_ID);
     }
 }

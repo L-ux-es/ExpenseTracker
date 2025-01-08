@@ -22,7 +22,6 @@ public class ExpenseRepository {
     }
 
     public List<Expense> findAllByUserId(int userId) {
-        System.out.println(userId);
         return jdbcClient.sql("SELECT expenses.id,description,category,date_creation,cost FROM expenses " +
                         "JOIN categories ON categories.id = expenses.category_fk WHERE expenses.user_fk = ?")
                 .param(userId).query(Expense.class).list();
@@ -119,9 +118,9 @@ public class ExpenseRepository {
                 .params(List.of(userId, startDate, finishDate)).query(Expense.class).list();
     }
 
-    public List<Expense> filterByCostMinorOrEqualTo(double cost,int userId) {
+    public List<Expense> filterByCostMinorOrEqualTo(double cost, int userId) {
         return jdbcClient.sql("SELECT expenses.id,description,category,date_creation,cost FROM expenses JOIN categories " +
-                "ON expenses.category_fk = categories.id  WHERE expenses.user_fk=? AND expenses.cost <= ?")
-                .params(List.of(userId,cost)).query(Expense.class).list();
+                        "ON expenses.category_fk = categories.id  WHERE expenses.user_fk=? AND expenses.cost <= ?")
+                .params(List.of(userId, cost)).query(Expense.class).list();
     }
 }
