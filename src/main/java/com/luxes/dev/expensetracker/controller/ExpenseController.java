@@ -3,9 +3,15 @@ package com.luxes.dev.expensetracker.controller;
 import com.luxes.dev.expensetracker.exception.ExpenseNotFoundException;
 import com.luxes.dev.expensetracker.model.CustomDate;
 import com.luxes.dev.expensetracker.model.Expense;
+import com.luxes.dev.expensetracker.model.User;
 import com.luxes.dev.expensetracker.repository.ExpenseRepository;
+import com.luxes.dev.expensetracker.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -17,90 +23,98 @@ import java.util.Optional;
 public class ExpenseController {
 
     private final ExpenseRepository expenseRepository;
-    private static final int USER_ID = 1;
+    private final UserRepository userRepository;
 
-    public ExpenseController(ExpenseRepository expenseRepository) {
+    public ExpenseController(ExpenseRepository expenseRepository, UserRepository userRepository) {
         this.expenseRepository = expenseRepository;
+        this.userRepository = userRepository;
+    }
+
+    private User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new UsernameNotFoundException("User not authenticated.");
+        }
+        String username = authentication.getName();
+        System.out.println("Username es" + username);
+        return userRepository.findByName(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found." + username));
     }
 
     @GetMapping("")
-    List<Expense> findAll() {
-        return expenseRepository.findAllByUserId(USER_ID);
+    ResponseEntity<List<Expense>> findAll() {
+        System.out.println("Inside findAll method");
+        return ResponseEntity.ok(expenseRepository.findAllByUserId(getAuthenticatedUser().id()));
     }
 
     @GetMapping("/{id}")
-    Expense findById(@PathVariable int id) {
-        Optional<Expense> task = expenseRepository.findById(id, USER_ID);
+    ResponseEntity<Expense> findById(@PathVariable int id) {
+        Optional<Expense> task = expenseRepository.findById(id, getAuthenticatedUser().id());
         if (task.isEmpty()) {
             throw new ExpenseNotFoundException();
         }
-        return task.get();
+        return ResponseEntity.ok(task.get());
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
     void create(@Valid @RequestBody Expense expense) {
-        expenseRepository.create(expense, USER_ID);
+        expenseRepository.create(expense, getAuthenticatedUser().id());
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/saveAll")
-    void saveAll(@Valid @RequestBody List<Expense> expenses) {
-        expenseRepository.saveAll(expenses, USER_ID);
-    }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("")
     void update(@Valid @RequestBody Expense expense) {
-        expenseRepository.update(expense, USER_ID);
+        expenseRepository.update(expense, getAuthenticatedUser().id());
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     void delete(@PathVariable int id) {
-        expenseRepository.delete(id, USER_ID);
+        expenseRepository.delete(id, getAuthenticatedUser().id());
     }
 
 
     @GetMapping("category/{category}")
-    List<Expense> findByCategory(@Valid @PathVariable String category) {
-        return expenseRepository.findByCategory(category, USER_ID);
+    ResponseEntity<List<Expense>> findByCategory(@Valid @PathVariable String category) {
+        return ResponseEntity.ok(expenseRepository.findByCategory(category, getAuthenticatedUser().id()));
     }
 
     @GetMapping("/pastweek")
-    List<Expense> filterByWeek() {
-        return expenseRepository.filterByWeek(1, USER_ID);
+    ResponseEntity<List<Expense>> filterByWeek() {
+        return ResponseEntity.ok(expenseRepository.filterByWeek(1, getAuthenticatedUser().id()));
     }
 
     @GetMapping("/lastmonth")
-    List<Expense> filterByLastMonth() {
-        return expenseRepository.filterByMonth(1, USER_ID);
+    ResponseEntity<List<Expense>> filterByLastMonth() {
+        return ResponseEntity.ok(expenseRepository.filterByMonth(1, getAuthenticatedUser().id()));
     }
 
     @GetMapping("/3months")
-    List<Expense> filterBy3Months() {
-        return expenseRepository.filterByLastMonths(3, USER_ID);
+    ResponseEntity<List<Expense>> filterBy3Months() {
+        return ResponseEntity.ok(expenseRepository.filterByLastMonths(3, getAuthenticatedUser().id()));
     }
 
     @GetMapping("/months/{cantMonths}")
-    List<Expense> filterByMonths(@PathVariable int cantMonths) {
-        return expenseRepository.filterByLastMonths(cantMonths, USER_ID);
+    ResponseEntity<List<Expense>> filterByMonths(@PathVariable int cantMonths) {
+        return ResponseEntity.ok(expenseRepository.filterByLastMonths(cantMonths, getAuthenticatedUser().id()));
     }
 
     @GetMapping("/date")
-    List<Expense> filterByDate(@RequestBody CustomDate customDate) {
+    ResponseEntity<List<Expense>> filterByDate(@RequestBody CustomDate customDate) {
         LocalDate startDate = customDate.startDate();
         LocalDate finishDate = customDate.finishDate();
-        return expenseRepository.filterByDates(startDate, finishDate, USER_ID);
+        return ResponseEntity.ok(expenseRepository.filterByDates(startDate, finishDate, getAuthenticatedUser().id()));
     }
 
     @GetMapping("/cost/{cost}")
-    List<Expense> filterByCost(@PathVariable double cost) {
-        return expenseRepository.filterByCostMinorOrEqualTo(cost, USER_ID);
+    ResponseEntity<List<Expense>> filterByCost(@PathVariable double cost) {
+        return ResponseEntity.ok(expenseRepository.filterByCostMinorOrEqualTo(cost, getAuthenticatedUser().id()));
     }
 
     @GetMapping("/count")
-    Integer count() {
-        return expenseRepository.count(USER_ID);
+    ResponseEntity<Integer> count() {
+        return ResponseEntity.ok(expenseRepository.count(getAuthenticatedUser().id()));
     }
 }
