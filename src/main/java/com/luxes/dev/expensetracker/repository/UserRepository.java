@@ -30,7 +30,7 @@ public class UserRepository {
 
     public void create(User user) {
         var created = jdbcClient.sql("INSERT INTO users (name,password,rol) VALUES (?,?,?)")
-                .params(List.of(user.name(), user.password(), user.rol())).update();
+                .params(List.of(user.name(), user.password(), user.rol().toLowerCase())).update();
         Assert.state(created == 1, "Failed to create user" + user.name());
     }
 
@@ -66,7 +66,7 @@ public class UserRepository {
                 .param(name).query(User.class).optional();
     }
 
-    public Optional<User> findUser(String name,String password) {
+    public Optional<User> findUser(String name, String password) {
         return jdbcClient.sql("SELECT * FROM users WHERE name=? AND password=?")
                 .params(List.of(name, password)).query(User.class).optional();
     }

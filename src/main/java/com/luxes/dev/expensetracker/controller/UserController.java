@@ -1,6 +1,5 @@
 package com.luxes.dev.expensetracker.controller;
 
-import com.luxes.dev.expensetracker.exception.UserNotFoundException;
 import com.luxes.dev.expensetracker.model.User;
 import com.luxes.dev.expensetracker.repository.UserRepository;
 import jakarta.validation.Valid;
@@ -28,17 +27,9 @@ public class UserController {
     @GetMapping("/{id}")
     User findById(@PathVariable int id) {
         Optional<User> user = userRepository.findById(id);
-        if (user.isEmpty()) {
-            throw new UserNotFoundException("User not found");
-        }
-        return user.get();
+        return user.orElse(null);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("")
-    void create(@Valid @RequestBody User user) {
-        userRepository.create(user);
-    }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
