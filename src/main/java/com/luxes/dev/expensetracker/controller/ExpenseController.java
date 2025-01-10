@@ -1,6 +1,5 @@
 package com.luxes.dev.expensetracker.controller;
 
-import com.luxes.dev.expensetracker.exception.ExpenseNotFoundException;
 import com.luxes.dev.expensetracker.model.CustomDate;
 import com.luxes.dev.expensetracker.model.Expense;
 import com.luxes.dev.expensetracker.model.User;
@@ -48,10 +47,7 @@ public class ExpenseController {
     @GetMapping("/{id}")
     ResponseEntity<Expense> findById(@PathVariable int id) {
         Optional<Expense> task = expenseRepository.findById(id, getAuthenticatedUser().id());
-        if (task.isEmpty()) {
-            throw new ExpenseNotFoundException();
-        }
-        return ResponseEntity.ok(task.get());
+        return task.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @ResponseStatus(HttpStatus.CREATED)
