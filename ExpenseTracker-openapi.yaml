@@ -1,0 +1,344 @@
+openapi: "3.1.0"
+info:
+  title: "ExpenseTracker API"
+  description: "ExpenseTracker API"
+  version: "1.0.0"
+servers:
+  - url: "https://ExpenseTracker"
+paths:
+  /api/v1/expenses/:
+    get:
+      summary: "GET api/v1/expenses/"
+      operationId: "findAll"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Expense"
+    post:
+      summary: "POST api/v1/expenses/"
+      operationId: "create"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Expense"
+        required: true
+      responses:
+        "201":
+          description: "Created"
+  /api/v1/expenses/3months:
+    get:
+      summary: "GET api/v1/expenses/3months"
+      operationId: "filterBy3Months"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Expense"
+  /api/v1/expenses/category/{category}:
+    get:
+      summary: "GET api/v1/expenses/category/{category}"
+      operationId: "findByCategory"
+      parameters:
+        - name: "category"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Expense"
+  /api/v1/expenses/cost/{cost}:
+    get:
+      summary: "GET api/v1/expenses/cost/{cost}"
+      operationId: "filterByCost"
+      parameters:
+        - name: "cost"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "double"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Expense"
+  /api/v1/expenses/count:
+    get:
+      summary: "GET api/v1/expenses/count"
+      operationId: "count"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "integer"
+                format: "int32"
+  /api/v1/expenses/date:
+    get:
+      summary: "GET api/v1/expenses/date"
+      operationId: "filterByDate"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomDate"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Expense"
+  /api/v1/expenses/lastmonth:
+    get:
+      summary: "GET api/v1/expenses/lastmonth"
+      operationId: "filterByLastMonth"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Expense"
+  /api/v1/expenses/months/{cantMonths}:
+    get:
+      summary: "GET api/v1/expenses/months/{cantMonths}"
+      operationId: "filterByMonths"
+      parameters:
+        - name: "cantMonths"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Expense"
+  /api/v1/expenses/pastweek:
+    get:
+      summary: "GET api/v1/expenses/pastweek"
+      operationId: "filterByWeek"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Expense"
+  /api/v1/expenses/{expenseId}:
+    put:
+      summary: "PUT api/v1/expenses/{expenseId}"
+      operationId: "update"
+      parameters:
+        - name: "expenseId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Expense"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+  /api/v1/expenses/{id}:
+    get:
+      summary: "GET api/v1/expenses/{id}"
+      operationId: "findById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Expense"
+    delete:
+      summary: "DELETE api/v1/expenses/{id}"
+      operationId: "delete"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+  /api/v1/users/{id}:
+    put:
+      summary: "PUT api/v1/users/{id}"
+      operationId: "update"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserToUpdate"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+    delete:
+      summary: "DELETE api/v1/users/{id}"
+      operationId: "delete"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+  /api/v1/auth/login:
+    post:
+      summary: "POST api/v1/auth/login"
+      operationId: "login"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserLogin"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/TokenResponse"
+  /api/v1/auth/register:
+    post:
+      summary: "POST api/v1/auth/register"
+      operationId: "register"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/TokenResponse"
+components:
+  schemas:
+    Expense:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        description:
+          type: "string"
+        category:
+          type: "string"
+        dateCreation:
+          type: "string"
+          format: "date"
+        cost:
+          type: "number"
+          format: "double"
+    CustomDate:
+      type: "object"
+      properties:
+        startDate:
+          type: "string"
+          format: "date"
+        finishDate:
+          type: "string"
+          format: "date"
+    UserToUpdate:
+      type: "object"
+      properties:
+        password:
+          type: "string"
+    UserLogin:
+      type: "object"
+      properties:
+        username:
+          type: "string"
+        password:
+          type: "string"
+    TokenResponse:
+      type: "object"
+      properties:
+        access_token:
+          type: "string"
+    User:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        name:
+          type: "string"
+        password:
+          type: "string"
+        rol:
+          type: "string"
