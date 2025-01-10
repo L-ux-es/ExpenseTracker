@@ -48,12 +48,15 @@ public class ExpenseRepository {
     private int getCategoryId(Expense expense) {
         int categoryId = categoryRepository.findIdByCategory(expense.category());
         if (categoryId < 0) {
-            categoryId = 1;
+            categoryId = categoryRepository.findIdByCategory("Others");
+            if (categoryId < 0) {
+                categoryId = 1;
+            }
         }
         return categoryId;
     }
 
-    public void update(Expense expense, int expenseId,int userId) {
+    public void update(Expense expense, int expenseId, int userId) {
         var updated = jdbcClient.sql("UPDATE expenses SET description=?, category_fk=?,date_creation=?,cost=? WHERE user_fk=? AND id=?")
                 .params(List.of(expense.description(), getCategoryId(expense), expense.dateCreation(), expense.cost(), userId, expenseId))
                 .update();
