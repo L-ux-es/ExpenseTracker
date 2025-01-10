@@ -1,46 +1,47 @@
 package com.luxes.dev.expensetracker.controller;
 
 import com.luxes.dev.expensetracker.model.User;
+import com.luxes.dev.expensetracker.model.UserToUpdate;
 import com.luxes.dev.expensetracker.repository.UserRepository;
+import com.luxes.dev.expensetracker.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
 
     private final UserRepository userRepository;
+    private final UserService userService;
 
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, UserService userService) {
         this.userRepository = userRepository;
-    }
-
-    @GetMapping("")
-    List<User> findAll() {
-        return userRepository.findAll();
-    }
-
-    @GetMapping("/{id}")
-    User findById(@PathVariable int id) {
-        Optional<User> user = userRepository.findById(id);
-        return user.orElse(null);
+        this.userService = userService;
     }
 
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
-    void update(@Valid @RequestBody User user, @PathVariable int id) {
-        userRepository.update(user, id);
+    ResponseEntity<String> update(@Valid @RequestBody UserToUpdate user, @PathVariable int id) {
+        User userAuth = userService.getAuthenticatedUser();
+        if (userAuth.id() == id) {
+            UserToUpdate newUser = new UserToUpdate(userService.updatePassword(user.password()));
+            userRepository.update(newUser, id);
+            return ResponseEntity.ok(userAuth.name() + "password updated");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not authorized to update other user");
+        }
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    void delete(@PathVariable int id) {
-        userRepository.delete(id);
+    ResponseEntity<String> delete(@PathVariable int id) {
+        if (userService.getAuthenticatedUser().id() == id) {
+             userRepository.delete(id);
+                return ResponseEntity.ok("User deleted successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not authorized to delete other user");
+        }
     }
 
 

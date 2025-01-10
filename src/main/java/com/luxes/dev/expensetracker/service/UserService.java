@@ -3,6 +3,9 @@ package com.luxes.dev.expensetracker.service;
 import com.luxes.dev.expensetracker.exception.UserException;
 import com.luxes.dev.expensetracker.model.User;
 import com.luxes.dev.expensetracker.repository.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,14 +22,6 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User findUserById(int idUser) {
-        return userRepository.findById(idUser).orElse(null);
-    }
-
-    public User findUserByUsername(String username) {
-        return userRepository.findByName(username).orElse(null);
-    }
-
 
     @Transactional
     public User registerUser(User user) {
@@ -34,9 +29,23 @@ public class UserService {
             throw new UserException("Username already exists:" + user.name());
         }
         String encodedPassword = passwordEncoder.encode(user.password());
-        User newUser = new User(user.id(), user.name(), encodedPassword, "Admin");
+        User newUser = new User(user.id(), user.name(), encodedPassword, "Client");
         userRepository.create(newUser);
         return newUser;
+    }
+
+    public String updatePassword(String password) {
+        return passwordEncoder.encode(password);
+    }
+
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new UsernameNotFoundException("User not authenticated.");
+        }
+        String username = authentication.getName();
+        return userRepository.findByName(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found." + username));
     }
 
 }

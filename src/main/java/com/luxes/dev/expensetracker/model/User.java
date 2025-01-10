@@ -9,7 +9,6 @@ public record User(
         String name,
         @NotNull(message = "Password should not be empty")
         String password,
-        @NotNull(message = "Rol should not be empty")
         String rol
 ) {
 }

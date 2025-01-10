@@ -54,7 +54,7 @@ public class ExpenseRepository {
     }
 
     public void update(Expense expense, int userId) {
-        var updated = jdbcClient.sql("UPDATE expense SET description=?, category_fk=?,date_creation=?,cost=? WHERE user_fk=? AND id=?")
+        var updated = jdbcClient.sql("UPDATE expenses SET description=?, category_fk=?,date_creation=?,cost=? WHERE user_fk=? AND id=?")
                 .params(List.of(expense.description(), getCategoryId(expense), expense.dateCreation(), expense.cost(), userId, expense.id()))
                 .update();
         Assert.state(updated == 1, "Failed to update expense" + expense.description());
@@ -72,12 +72,6 @@ public class ExpenseRepository {
 
     public int count(int userId) {
         return jdbcClient.sql("SELECT count(*) FROM expenses WHERE user_fk=?").param(userId).query(Integer.class).single();
-    }
-
-    public void saveAll(List<Expense> expenses, int userId) {
-        for (Expense expense : expenses) {
-            create(expense, userId);
-        }
     }
 
     public List<Expense> findByCategory(String category, int userId) {
