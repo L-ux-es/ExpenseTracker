@@ -37,7 +37,7 @@ public class ExpenseRepository {
 
     public void create(Expense expense, int userId) {
         var created = jdbcClient.sql("INSERT INTO expenses (description,category_fk,date_creation,cost,user_fk) VALUES (?,?,?,?,?)")
-                .params(List.of(expense.description(), getCategoryId(expense), expense.dateCreation(), expense.cost()), userId).update();
+                .params(List.of(expense.description(), getCategoryId(expense), expense.dateCreation(), expense.cost(), userId)).update();
         Assert.state(created == 1, "Failed to create expense" + expense.description());
     }
 
@@ -53,9 +53,9 @@ public class ExpenseRepository {
         return categoryId;
     }
 
-    public void update(Expense expense, int userId) {
+    public void update(Expense expense, int expenseId,int userId) {
         var updated = jdbcClient.sql("UPDATE expenses SET description=?, category_fk=?,date_creation=?,cost=? WHERE user_fk=? AND id=?")
-                .params(List.of(expense.description(), getCategoryId(expense), expense.dateCreation(), expense.cost(), userId, expense.id()))
+                .params(List.of(expense.description(), getCategoryId(expense), expense.dateCreation(), expense.cost(), userId, expenseId))
                 .update();
         Assert.state(updated == 1, "Failed to update expense" + expense.description());
     }

@@ -43,14 +43,13 @@ public class ExpenseController {
         expenseRepository.create(expense, userService.getAuthenticatedUser().id());
     }
 
-
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PutMapping("")
-    void update(@Valid @RequestBody Expense expense) {
-        expenseRepository.update(expense, userService.getAuthenticatedUser().id());
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/{expenseId}")
+    void update(@Valid @RequestBody Expense expense, @PathVariable int expenseId) {
+        expenseRepository.update(expense, expenseId, userService.getAuthenticatedUser().id());
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
     void delete(@PathVariable int id) {
         expenseRepository.delete(id, userService.getAuthenticatedUser().id());
