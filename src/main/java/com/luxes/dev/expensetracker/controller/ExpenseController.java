@@ -36,14 +36,12 @@ public class ExpenseController {
             throw new UsernameNotFoundException("User not authenticated.");
         }
         String username = authentication.getName();
-        System.out.println("Username es" + username);
         return userRepository.findByName(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found." + username));
     }
 
     @GetMapping("")
     ResponseEntity<List<Expense>> findAll() {
-        System.out.println("Inside findAll method");
         return ResponseEntity.ok(expenseRepository.findAllByUserId(getAuthenticatedUser().id()));
     }
 

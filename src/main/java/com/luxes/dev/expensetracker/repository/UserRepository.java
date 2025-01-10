@@ -57,9 +57,6 @@ public class UserRepository {
         return jdbcClient.sql("SELECT count(*) FROM users WHERE LOWER(rol) = LOWER(?)").param(rol).query(Integer.class).single();
     }
 
-    public void saveAll(List<User> users) {
-        users.forEach(this::create);
-    }
 
     public Optional<User> findByName(String name) {
         return jdbcClient.sql("SELECT * FROM users WHERE users.name = ?")
