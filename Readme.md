@@ -1,4 +1,4 @@
-# Expense tracker API
+# Expense Tracker API
 
 API for an expense tracker. This is a solution of [Expense Tracker API](https://roadmap.sh/projects/expense-tracker-api) project [roadmap.sh](https://roadmaps.sh). 
 
@@ -27,8 +27,15 @@ API for an expense tracker. This is a solution of [Expense Tracker API](https://
 
 ###### Generated with OpenAPI Specifications version 242.24807.4 in IntelliJ IDEA  
 
-Find more details in [ExpenseTracker-openapi](ExpenseTracker-openapi.yaml).
- 
+<details>
+<summary> View extensive documentation</summary>
+
+![Expense Tracker API doc](ExpenseTrackerAPI-doc.png)
+
+###### View of [ExpenseTracker-openapi](ExpenseTracker-openapi.yaml) by Redocly.
+
+</details>
+
 > [!IMPORTANT]
 > When a user is created, their rol always is Client.
 > User only can be Admin or Client. 
@@ -47,5 +54,7 @@ When you start the application if the table is missing data, the data is added a
 
 ![Table Categories](CategoriesTable.png)
 
+> [!Note]
+> To use the application, fill in the data in the .env file.
 
 
