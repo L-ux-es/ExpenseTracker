@@ -1,6 +1,6 @@
 # Expense tracker API
 
-API for an expense tracker. Project of [roadmap.sh](https://roadmap.sh)
+API for an expense tracker. This is a solution of [Expense Tracker API](https://roadmap.sh/projects/expense-tracker-api) project [roadmap.sh](https://roadmaps.sh). 
 
 - Create, read, update and delete expenses.
 - Authentication of users to use the API
@@ -22,10 +22,16 @@ API for an expense tracker. Project of [roadmap.sh](https://roadmap.sh)
 
 ## API
 
-<iframe src="https://redocly.github.io/redoc/?url=ExpenseTracker-openapi.yaml" width="100%" height="800px">
-</iframe>
+![ExpensesAPI](ExpensesAPI.png)
+![UsersAPI](UsersApi.png)
 
 ###### Generated with OpenAPI Specifications version 242.24807.4 in IntelliJ IDEA  
+
+Find more details in [ExpenseTracker-openapi](ExpenseTracker-openapi.yaml).
+ 
+> [!IMPORTANT]
+> When a user is created, their rol always is Client.
+> User only can be Admin or Client. 
 
 ## Structure of Database
 
@@ -37,5 +43,9 @@ API for an expense tracker. Project of [roadmap.sh](https://roadmap.sh)
 
 ### Table: Categories
 
+When you start the application if the table is missing data, the data is added automatically.
+
 ![Table Categories](CategoriesTable.png)
+
+
 
