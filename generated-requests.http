@@ -1,0 +1,282 @@
+###
+GET http://localhost:8080/api/v1/expenses/
+
+###
+PUT http://localhost:8080/api/v1/expenses/
+
+###
+POST http://localhost:8080/api/v1/expenses/
+
+###
+GET http://localhost:8080/api/v1/expenses/3months
+
+###
+GET http://localhost:8080/api/v1/expenses/category/{{category}}
+
+###
+GET http://localhost:8080/api/v1/expenses/cost/{{cost}}
+
+###
+GET http://localhost:8080/api/v1/expenses/count
+
+###
+GET http://localhost:8080/api/v1/expenses/date
+
+###
+GET http://localhost:8080/api/v1/expenses/lastmonth
+
+###
+GET http://localhost:8080/api/v1/expenses/months/{{cantMonths}}
+
+###
+GET http://localhost:8080/api/v1/expenses/pastweek
+
+###
+GET http://localhost:8080/api/v1/expenses/{{id}}
+
+###
+DELETE http://localhost:8080/api/v1/expenses/{{id}}
+
+###
+PUT http://localhost:8080/api/v1/users/{{id}}
+
+###
+DELETE http://localhost:8080/api/v1/users/{{id}}
+
+###
+POST http://localhost:8080/api/v1/auth/login
+
+###
+POST http://localhost:8080/api/v1/auth/register
+
+###
+POST https://ExpenseTracker/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "",
+  "password": ""
+}
+
+###
+POST https://ExpenseTracker/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "id": 0,
+  "name": "",
+  "password": "",
+  "rol": ""
+}
+
+###
+GET https://ExpenseTracker/api/v1/expenses/
+
+###
+POST https://ExpenseTracker/api/v1/expenses/
+
+###
+GET https://ExpenseTracker/api/v1/expenses/3months
+
+###
+GET https://ExpenseTracker/api/v1/expenses/category/{{category}}
+
+###
+GET https://ExpenseTracker/api/v1/expenses/cost/{{cost}}
+
+###
+GET https://ExpenseTracker/api/v1/expenses/count
+
+###
+GET https://ExpenseTracker/api/v1/expenses/date
+
+###
+GET https://ExpenseTracker/api/v1/expenses/lastmonth
+
+###
+GET https://ExpenseTracker/api/v1/expenses/months/{{cantMonths}}
+
+###
+GET https://ExpenseTracker/api/v1/expenses/pastweek
+
+###
+PUT https://ExpenseTracker/api/v1/expenses/{{expenseId}}
+
+###
+GET https://ExpenseTracker/api/v1/expenses/{{id}}
+
+###
+DELETE https://ExpenseTracker/api/v1/expenses/{{id}}
+
+###
+PUT https://ExpenseTracker/api/v1/users/{{id}}
+
+###
+DELETE https://ExpenseTracker/api/v1/users/{{id}}
+
+###
+GET http://localhost:8080/api/v1/expenses/
+
+###
+POST http://localhost:8080/api/v1/expenses/
+
+###
+GET http://localhost:8080/api/v1/expenses/3months
+
+###
+GET http://localhost:8080/api/v1/expenses/category/{{category}}
+
+###
+GET http://localhost:8080/api/v1/expenses/cost/{{cost}}
+
+###
+GET http://localhost:8080/api/v1/expenses/count
+
+###
+GET http://localhost:8080/api/v1/expenses/date
+
+###
+GET http://localhost:8080/api/v1/expenses/lastmonth
+
+###
+GET http://localhost:8080/api/v1/expenses/months/{{cantMonths}}
+
+###
+GET http://localhost:8080/api/v1/expenses/pastweek
+
+###
+PUT http://localhost:8080/api/v1/expenses/{{expenseId}}
+
+###
+GET http://localhost:8080/api/v1/expenses/{{id}}
+
+###
+DELETE http://localhost:8080/api/v1/expenses/{{id}}
+
+###
+PUT http://localhost:8080/api/v1/users/{{id}}
+
+###
+DELETE http://localhost:8080/api/v1/users/{{id}}
+
+###
+POST http://localhost:8080/api/v1/auth/login
+
+###
+POST http://localhost:8080/api/v1/auth/register
+
+###
+POST https://ExpenseTracker/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "",
+  "password": ""
+}
+
+###
+POST https://ExpenseTracker/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "id": 0,
+  "name": "",
+  "password": "",
+  "rol": ""
+}
+
+###
+GET https://ExpenseTracker/api/v1/expenses/
+
+###
+POST https://ExpenseTracker/api/v1/expenses/
+
+###
+GET https://ExpenseTracker/api/v1/expenses/3months
+
+###
+GET https://ExpenseTracker/api/v1/expenses/category/{{category}}
+
+###
+GET https://ExpenseTracker/api/v1/expenses/cost/{{cost}}
+
+###
+GET https://ExpenseTracker/api/v1/expenses/count
+
+###
+GET https://ExpenseTracker/api/v1/expenses/date
+
+###
+GET https://ExpenseTracker/api/v1/expenses/lastmonth
+
+###
+GET https://ExpenseTracker/api/v1/expenses/months/{{cantMonths}}
+
+###
+GET https://ExpenseTracker/api/v1/expenses/pastweek
+
+###
+PUT https://ExpenseTracker/api/v1/expenses/{{expenseId}}
+
+###
+GET https://ExpenseTracker/api/v1/expenses/{{id}}
+
+###
+DELETE https://ExpenseTracker/api/v1/expenses/{{id}}
+
+###
+PUT https://ExpenseTracker/api/v1/users/{{id}}
+
+###
+DELETE https://ExpenseTracker/api/v1/users/{{id}}
+
+###
+GET http://localhost:8080/api/v1/expenses/
+
+###
+POST http://localhost:8080/api/v1/expenses/
+
+###
+GET http://localhost:8080/api/v1/expenses/3months
+
+###
+GET http://localhost:8080/api/v1/expenses/category/{{category}}
+
+###
+GET http://localhost:8080/api/v1/expenses/cost/{{cost}}
+
+###
+GET http://localhost:8080/api/v1/expenses/count
+
+###
+GET http://localhost:8080/api/v1/expenses/date
+
+###
+GET http://localhost:8080/api/v1/expenses/lastmonth
+
+###
+GET http://localhost:8080/api/v1/expenses/months/{{cantMonths}}
+
+###
+GET http://localhost:8080/api/v1/expenses/pastweek
+
+###
+PUT http://localhost:8080/api/v1/expenses/{{expenseId}}
+
+###
+GET http://localhost:8080/api/v1/expenses/{{id}}
+
+###
+DELETE http://localhost:8080/api/v1/expenses/{{id}}
+
+###
+PUT http://localhost:8080/api/v1/users/{{id}}
+
+###
+DELETE http://localhost:8080/api/v1/users/{{id}}
+
+###
+POST http://localhost:8080/api/v1/auth/login
+
+###
+POST http://localhost:8080/api/v1/auth/register
