@@ -1,6 +1,6 @@
 # Expense Tracker API
 
-API for an expense tracker. This is a solution of [Expense Tracker API](https://roadmap.sh/projects/expense-tracker-api) project [roadmap.sh](https://roadmaps.sh). 
+API for an expense tracker. This is a solution of [Expense Tracker API](https://roadmap.sh/projects/expense-tracker-api) project [roadmap.sh](https://roadmap.sh). 
 
 - Create, read, update and delete expenses.
 - Authentication of users to use the API
